@@ -8,13 +8,13 @@ import { isAuthenticated } from '../middlewares/auth';
 
 const authRouter = express.Router()
 
-authRouter.get("/google", passport.authenticate("google"));
+authRouter.get("/auth/google", passport.authenticate("google"));
 
 authRouter.
     get("/auth/google/callback", 
     passport.authenticate("google" , {failureRedirect : "/signIn"}),
     (req : Request, res : Response) => {
-    res.redirect(`${process.env.CLIENT_URL}/dashboard`);
+   return res.redirect(`${process.env.CLIENT_URL}/dashboard`);
     }
 );
 
@@ -26,9 +26,12 @@ authRouter.get("/user-profile", isAuthenticated , (req : Request, res : Response
     }
 })
 
-authRouter.post("/signOut",  (req : Request, res : Response, next : NextFunction) => {
+authRouter.post("/logout",  (req : Request, res : Response, next : NextFunction) => {
     req.logout((error) => {
         if(error) return next(error);
-        return res.status(201).json(new ApiResponse(201, null, "sign out success!"))
+        return res.redirect(`${process.env.CLIENT_URL}/login`)
     })
 })
+
+
+export default authRouter;

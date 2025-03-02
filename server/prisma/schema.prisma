@@ -24,7 +24,6 @@ model User {
  googleId              String   @unique
  userName              String   
  emailId               String   @unique
-//  password              String
  profilePic            String    @default("https://plus.unsplash.com/premium_photo-1739786996022-5ed5b56834e2?q=80&w=1480")  
 
  isPremium             Boolean

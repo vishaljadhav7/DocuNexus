@@ -3,8 +3,9 @@ import { getDocument, PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { promptForContractRecognition, promptForReviewingContract } from "../utils/promptsForAI";
 
+
 const AI_MODEL = "gemini-pro";
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_KEY!);
 const aiModel = genAI.getGenerativeModel({ model: AI_MODEL });
 
 class PDFProcessingError extends Error {
@@ -18,7 +19,7 @@ class PDFProcessingError extends Error {
 }
 
 
-interface Analysis {
+export interface Analysis {
   risks: { risk: string; riskDetails: string }[];
   opportunities: { opportunity: string; opportunityDetails: string }[];
   summary: string;

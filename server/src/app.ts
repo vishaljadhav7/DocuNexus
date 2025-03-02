@@ -4,7 +4,7 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import session from "express-session";
 import passport from 'passport';
-
+import authRouter from './routes/auth.routes';
 const app = express();
 
 app.use(cors({
@@ -28,6 +28,9 @@ app.use(session({
       },
 }))
 
+
+import './config/passport';
+
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -35,5 +38,7 @@ app.get("/" , (req : Request, res : Response) => {
     res.send("this is home route")
 })
 
+app.use('/api/v1', authRouter);
 
-export {app}     
+
+export {app};     

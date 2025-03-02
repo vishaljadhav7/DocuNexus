@@ -5,10 +5,10 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-passport.use(
+ export default passport.use(
     new GoogleStrategy({
-    clientID : "",
-    clientSecret : "",
+    clientID : process.env.CLIENT_ID!,
+    clientSecret : process.env.CLIENT_SECRET!,
     callbackURL : "/auth/google/callback",
     scope : ["profile", "email"] 
     }, 
