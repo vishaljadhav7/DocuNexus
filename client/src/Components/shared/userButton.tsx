@@ -13,27 +13,21 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Icons } from "./icons";
-// import { useRouter } from "next/navigation";
-// import { addUser } from "@/features/auth/authSlice";
-import axios from "axios";
+import { openModal } from "@/features/modal/modalSlice";
+
 
 
 function UserButton() {
-  // const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch()
   const user = useAppSelector((store : RootState) => store.user);
+  
+
+  function handleClick  ()  {
+    dispatch(openModal("connectAccountModal"))
+  }
  
-  async function googleSignIn(): Promise<void> {
-      try {
-        const user = await axios.get('http://localhost:4000/api/v1/auth/google')
-        if(!user) throw new Error("auth failed!");
-
-      } catch (error : any) {
-        console.error(`Error  : ${error.message}`)
-      } 
-  }  
-
   return (
-    <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
+    <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">      
       {user.isAuthenticated? 
         (<> 
          <DropdownMenu>
@@ -76,7 +70,7 @@ function UserButton() {
         </>) 
         : 
         (<> 
-        <Button onClick={googleSignIn}>
+        <Button onClick={handleClick}>
             Sign in
           </Button>
         </>)}

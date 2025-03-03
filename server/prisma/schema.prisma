@@ -58,11 +58,8 @@ model ContractReview {
   terminationConditions       String? 
   overallScore                Int  
 
- // intellectualPropertyClauses
   createdAt                   DateTime  @default(now())
   expirationDate              DateTime?
-
-  // customFields                Map  
   
   language                    String @default("en")
   aiModel                     String @default("gemini-pro")

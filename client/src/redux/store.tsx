@@ -1,15 +1,18 @@
 'use client'
 
 import { useRef } from "react";
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
 import userReducer from '@/features/auth/authSlice';
+import contractReducer from '@/features/contracts/contractSlice';
+import modalReducer from '@/features/modal/modalSlice';
 import {
   TypedUseSelectorHook,
   useDispatch,
   useSelector,
   Provider,
 } from "react-redux";
-
+import { authApi } from "@/features/auth/authApi";
+import { contractApi } from "@/features/contracts/contractApi";
 import { setupListeners } from "@reduxjs/toolkit/query";
 
 // import {
@@ -21,20 +24,18 @@ import { setupListeners } from "@reduxjs/toolkit/query";
 //   REGISTER,
 // } from "redux-persist";
 
-// const rootReducer = combineReducers({
-//   global: globalReducer,
-//   data : dataReducer,
-//   [api.reducerPath]: api.reducer,
-// });
-
-
 
 /* REDUX STORE */
 export const makeStore = () => {
   return configureStore({
     reducer: {
       user : userReducer,
+      contract : contractReducer,
+      modal : modalReducer,
+      [contractApi.reducerPath] : contractApi.reducer,
+      [authApi.reducerPath] : authApi.reducer
     },
+    middleware : (getDefaultMiddleware) => getDefaultMiddleware().concat(authApi.middleware).concat(contractApi.middleware),
 })};
 
 /* REDUX TYPES */

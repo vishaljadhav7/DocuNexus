@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Button } from '@/components/ui/button';
+import UserButton from "../shared/userButton";
 
 const navItems: { name: string; href: string }[] = [
   { name: "Dashboard", href: "/dashboard" },
@@ -13,13 +13,6 @@ const navItems: { name: string; href: string }[] = [
 
 export function Header() {
   const pathname = usePathname();
-
-   function googleSignIn(): Promise<void> {
-    return new Promise((resolve) => {
-      window.location.href = `http://localhost:4000/api/v1/auth/google`;
-      resolve();
-    });
-  }
 
   return (
     <header className="sticky px-4 top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
@@ -45,9 +38,7 @@ export function Header() {
             ))}
           </nav>
         </div>
-        {/* <UserButton /> */}
-        <Button onClick={googleSignIn}>Sign In</Button >
-        
+        <UserButton />
       </div>
     </header>
   );

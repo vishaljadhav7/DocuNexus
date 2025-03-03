@@ -34,7 +34,7 @@ app.use((0, express_session_1.default)({
 require("./config/passport");
 app.use(passport_1.default.initialize());
 app.use(passport_1.default.session());
-app.get("/", (req, res) => {
-    res.send("this is home route");
+app.get("/asd", (req, res) => {
+    res.send("failed auth");
 });
-app.use('/api/v1', auth_routes_1.default);
+app.use('/auth', auth_routes_1.default);

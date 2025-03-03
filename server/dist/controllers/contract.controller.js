@@ -73,32 +73,34 @@ const reviewContract = (req, res) => __awaiter(void 0, void 0, void 0, function*
         else {
             analysis = yield (0, ai_services_1.reviewContractWithAI)(textualPdf, "free", contractType);
         }
+        console.log(`!analysis.summary || !analysis.risks || !analysis.opportunities -<< >>-`, analysis);
         if (!analysis.summary || !analysis.risks || !analysis.opportunities) {
             throw new Error("Failed to analyze contract");
         }
-        const newContractReview = yield prisma.contractReview.create({
-            data: {
-                userId: user.id,
-                contractText: textualPdf,
-                contractType,
-                summary: analysis.summary,
-                aiModel: "gemini-pro",
-                version: 1,
-                overallScore: 75
-            }
-        });
-        if (!newContractReview)
-            throw new Error("contract analysis failed");
-        const { risks, opportunities } = analysis;
-        const riskData = risks.map((risk) => (Object.assign(Object.assign({}, risk), { contractReviewId: newContractReview.id, severity: "LOW" })));
-        const opportunitiesData = risks.map((opportuniy) => (Object.assign(Object.assign({}, opportuniy), { contractReviewId: newContractReview.id, impact: "LOW" })));
-        // const allRisks = await prisma.risk.createMany({ data : {
-        //   riskData  
-        // }})
-        // const allOpportunities = await prisma.opportunity.createMany({opportunitiesData })
-        console.log(riskData, opportunitiesData);
+        //   const newContractReview = await prisma.contractReview.create({
+        //     data : {
+        //         userId : user.id ,
+        //         contractText : textualPdf,
+        //         contractType ,
+        //         summary : analysis.summary,
+        //         aiModel : "gemini-pro",
+        //         version : 1,
+        //         overallScore : 75 
+        //     }
+        //   })
+        //   if(!newContractReview) throw new Error("contract analysis failed");
+        //   const {risks, opportunities} = analysis
+        //   const riskData  = risks.map((risk) => ({...risk, contractReviewId : newContractReview.id , severity : "LOW"}));
+        //   const opportunitiesData = opportunities.map((opportuniy) => ({...opportuniy, contractReviewId : newContractReview.id, impact : "LOW"}))
+        //   //@ts-ignore
+        //   const allRisks = await prisma.risk.createMany({ data : {riskData} })
+        //  //@ts-ignore
+        //   const allOpportunities = await prisma.opportunity.createMany({ data : [opportunitiesData]})
+        //   console.log(riskData, opportunitiesData);
+        //   res.status(200).json({data : newContractReview})
     }
     catch (error) {
+        console.error(`${error.message}`);
     }
 });
 exports.reviewContract = reviewContract;

@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import multer from "multer";
-import { getUuid } from "pdfjs-dist/types/src/shared/util";
 import redis from "../config/redis";
 import ApiError from "../utils/ApiError";
 import ApiResponse from "../utils/ApiResponse";
@@ -10,10 +9,7 @@ import {
     recognizeContractType
 } from "../services/ai.services";
 
-import { Opportunity, PrismaClient, Risk , User} from "@prisma/client";
-// import { Analysis } from "../services/ai.services";
-
-// @ts-nocheck
+import {  PrismaClient , User} from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -24,7 +20,7 @@ const upload = multer({
         cb(null, true);
       } else {
         cb(null, false);
-        cb(new Error("Only pdf files are allowed"));
+        // cb(new Error("Only pdf files are allowed"));
       }
     },
   }).single("contract");
@@ -35,12 +31,15 @@ const upload = multer({
     req: Request,
     res: Response
   ) => {
-      
+ 
     try {
      const user = req.user as User;
-     if(!req.file) throw new Error("No file uploaded!");
+
+     if(!req.file) {
+      throw new Error("No file uploaded!")
+     };
        
-     const fileKey = `file:${user.id}:${getUuid()}`;
+     const fileKey = `file:${user.id}:${Date.now()}`;
      await redis.set(fileKey, req.file.buffer);
      await redis.expire(fileKey, 3600);
 
@@ -52,6 +51,7 @@ const upload = multer({
      res.status(201).json(new ApiResponse(200, recognizedType, "type detected successfully"))
 
     } catch (error : any) {
+
       res.status(400).json(new ApiError(400, `Error : ${error.message}`))  
     }
   }
@@ -66,18 +66,19 @@ const upload = multer({
 
       if(!contractType) throw new Error("No contract type provided!");
       
-      const fileKey = `file:${user.id}:${getUuid()}`;
+      const fileKey = `file:${user.id}:${Date.now()}`;
       await redis.set(fileKey, req.file.buffer);
       await redis.expire(fileKey, 3600);
 
       const textualPdf = await retrieveTextFromPDF(fileKey);
-      let analysis;
-      
-      if (user.isPremium) {
+
+      let analysis ;
+      if (!user.isPremium) {
         analysis = await reviewContractWithAI(textualPdf, "premium", contractType);
       } else {
         analysis = await reviewContractWithAI(textualPdf, "free", contractType);
       }
+    
 
       if (!analysis.summary || !analysis.risks || !analysis.opportunities){
         throw new Error("Failed to analyze contract");
@@ -87,35 +88,55 @@ const upload = multer({
         data : {
             userId : user.id ,
             contractText : textualPdf,
-            contractType ,
+            contractType,
             summary : analysis.summary,
             aiModel : "gemini-pro",
             version : 1,
-            overallScore : 75 
+            overallScore : analysis.overallScore || 0, 
+            recommendations : analysis.recommendations,
+            clauses : analysis.clauses,  
+            negotiationPoints : analysis.negotiationPoints,
+            performanceMetrics : analysis.performanceMetrics,
+            contractFinancialTerms : {
+              create : {
+                description : analysis.contractFinancialTerms?.description || "",
+                details : analysis.contractFinancialTerms?.details
+              }
+            },
+            compensationStructure : {
+               create : {
+                baseSalary : analysis.compensationStructure?.baseSalary,
+                bonuses : analysis.compensationStructure?.bonuses,
+                equity : analysis.compensationStructure?.equity,
+                otherBenefits : analysis.compensationStructure?.otherBenefits 
+               } 
+            },
+            terminationConditions : analysis.terminationConditions,     
         }
       })
       
-      if(!newContractReview) throw new Error("contract analysis failed");
+      if(!newContractReview) throw new Error("contract not updated in db");
       
       const {risks, opportunities} = analysis
   
-      const riskData  = risks.map((risk) => ({...risk, contractReviewId : newContractReview.id , severity : "LOW"}));
+      const risksData = risks.map((risk) => ({ ...risk, contractReviewId: newContractReview.id , severity : risk.severity}));
+      const opportunitiesData = opportunities.map((opportunity) => ({ ...opportunity, contractReviewId: newContractReview.id , impact : opportunity.impact}));      
 
-      const opportunitiesData = opportunities.map((opportuniy) => ({...opportuniy, contractReviewId : newContractReview.id, impact : "LOW"}))
-
-      //@ts-ignore
-      const allRisks = await prisma.risk.createMany({ data : {riskData} })
-
-     //@ts-ignore
-      const allOpportunities = await prisma.opportunity.createMany({ data : [opportunitiesData]})
-
+      await prisma.$transaction(async (tx) => {
       
-       
-      console.log(riskData, opportunitiesData);
-
-      res.status(200).json({data : newContractReview})
+          await tx.risk.createMany({ data: risksData });
+     
+          await tx.opportunity.createMany({ data: opportunitiesData });
+      });
+      
+      const reviewedContract = await prisma.contractReview.findUnique({
+          where: { id: newContractReview.id },
+          include: { risks: true, opportunities: true }
+      });
+      res.status(200).json(new ApiResponse(200, reviewedContract, "contract fetched successfully!"))
        
      } catch (error : any) {
         console.error(`${error.message}`)
+        res.status(200).json(`Error : ${error.message}`)
      }
   }

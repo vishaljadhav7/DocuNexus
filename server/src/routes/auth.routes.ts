@@ -5,17 +5,17 @@ import ApiResponse from '../utils/ApiResponse';
 import ApiError from '../utils/ApiError';
 import { isAuthenticated } from '../middlewares/auth';
 
-
 const authRouter = express.Router()
 
-authRouter.get("/auth/google", passport.authenticate("google"));
-
-authRouter.
-    get("/auth/google/callback", 
-    passport.authenticate("google" , {failureRedirect : "/signIn"}),
-    (req : Request, res : Response) => {
-   return res.redirect(`${process.env.CLIENT_URL}/dashboard`);
+authRouter.get("/google", 
+    passport.authenticate("google", { scope: ["profile", "email"] }), 
+    (req: Request, res: Response) => {
+        res.status(200).json("ok")
     }
+);
+authRouter.
+    get("/google/callback", 
+    passport.authenticate("google" , { successRedirect : `${process.env.CLIENT_URL}/dashboard`})
 );
 
 authRouter.get("/user-profile", isAuthenticated , (req : Request, res : Response) => {
