@@ -1,7 +1,41 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+export interface Analysis {
+  risks: { 
+    risk: string; 
+    riskDetails: string , 
+    severity : "LOW" | "MEDIUM" |"HIGH" 
+    }[];
+  opportunities: {
+     opportunity: string; 
+     opportunityDetails: string , 
+     impact : "LOW" | "MEDIUM" |"HIGH"
+    }[];
+  summary: string;
+  financialTerms : {description : string, details : string[]},
+  clauses : string[];
+  legalCompliance  : string;
+  negotiationPoints : string[];
+  overallScore : number;
+  recommendations : string[];
+  terminationConditions : string;
+  contractDuration : string;
+  performanceMetrics : string[];
+  contractFinancialTerms : {
+    description : "",
+    details : string[]
+  },
+  compensationStructure : {
+    baseSalary : string;
+    bonuses : string;
+    equity : string;
+    otherBenefits : string;
+  }
+}
+
+
 interface ContractState {
-  analysisResults: any;
+  analysisResults: Analysis | undefined;
 }
 
 const initialState: ContractState = {
@@ -12,7 +46,7 @@ const contractSlice = createSlice({
   name: 'contract',
   initialState,
   reducers: {
-    setAnalysisResults: (state, action: PayloadAction<any>) => {
+    setAnalysisResults: (state, action: PayloadAction<Analysis>) => {
       state.analysisResults = action.payload;
     },
   },

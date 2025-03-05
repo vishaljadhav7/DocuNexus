@@ -16,7 +16,8 @@ const prisma = new PrismaClient();
     }, 
     async ( req ,accessToken, refreshToken, profile :  Profile, done : VerifyCallback) => {
       let user : User | null;
-      if(!profile) throw new Error("Profile not found")
+      if(!profile) throw new Error("Profile not found");
+
       try {
         user = await prisma.user.findUnique({ 
             where : {googleId : profile.id}
@@ -33,7 +34,7 @@ const prisma = new PrismaClient();
           })
         }
   
-     done(null, user as User)
+       done(null, user as User)
       } catch (error) {
           done(error, false)
       }

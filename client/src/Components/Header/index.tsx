@@ -3,16 +3,22 @@
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import UserButton from "../shared/userButton";
+import { Button } from "../ui/button";
+import { openModal } from "@/features/modal/modalSlice";
+import { useAppDispatch } from "@/redux/store";
 
 const navItems: { name: string; href: string }[] = [
   { name: "Dashboard", href: "/dashboard" },
-  { name: "Pricing", href: "/pricing" },
   { name: "Privacy Policy", href: "/privacy" },
 ];
 
 export function Header() {
+  const dispatch = useAppDispatch()
+  
   const pathname = usePathname();
+  function handleClick  ()  {
+    dispatch(openModal("connectAccountModal"))
+  }
 
   return (
     <header className="sticky px-4 top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
@@ -38,7 +44,9 @@ export function Header() {
             ))}
           </nav>
         </div>
-        <UserButton />
+        <Button onClick={handleClick}>
+            Sign in
+          </Button>
       </div>
     </header>
   );

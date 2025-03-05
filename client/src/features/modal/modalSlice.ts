@@ -24,7 +24,6 @@ const modalSlice = createSlice({
 export const { openModal, closeModal } = modalSlice.actions;
 export default modalSlice.reducer;
 
-// Selector to check if a modal is open
 export const selectIsModalOpen = (state: { modal: ModalState }, key: string) =>
   Boolean(state.modal.modals[key]);
 

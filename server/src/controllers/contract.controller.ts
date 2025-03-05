@@ -140,3 +140,44 @@ const upload = multer({
         res.status(200).json(`Error : ${error.message}`)
      }
   }
+
+
+  export const getContractById = async (req: Request, res: Response) => {
+    try {
+      const user : any = req.user;
+      const contractId = req.params.contractId
+      const contract =  await prisma.contractReview.findUnique({
+        where : {
+          userId : user.id,
+          id : contractId
+        }
+      })
+
+      if(!contract){
+         throw new Error("Could not fetch contract for given contractId")   
+      }
+
+      res.status(201).json(new ApiResponse(201, contract, "contract fetched  for given contractId"))
+    } catch (error : any) {
+      res.status(401).json(new ApiError(401, `Error : ${error.message}`))
+    }
+  }
+
+  export const getAllContracts = async (req: Request, res: Response) => { 
+    try {
+      const user : any = req.user;
+      const allContracts =  await prisma.contractReview.findMany({
+        where : {
+          userId : user.id,
+        }
+      })
+
+      if(!allContracts.length){
+         throw new Error("Could not fetch contract for given contractId")   
+      }
+
+      res.status(201).json(new ApiResponse(201, allContracts, "contract fetched  for given contractId"))
+    } catch (error : any) {
+      res.status(401).json(new ApiError(401, `Error : ${error.message}`))
+    }
+  }

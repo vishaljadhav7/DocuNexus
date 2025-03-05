@@ -26,10 +26,11 @@ export const contractApi = createApi({
         body: formData,
       }),
       transformResponse: (res: any) => {
-        console.log("res  _____<<<<>>>>><<<  ", res)
+        console.log("analyzeContract <<<<>>>>><<<>>>  ", res)
         return res.data        
       },
     }),
+    
   })
 });
 

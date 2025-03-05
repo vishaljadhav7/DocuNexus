@@ -14,7 +14,7 @@ export interface User {
     userId : string;
  } 
 
- interface User1 {
+export interface User1 {
     isAuthenticated : boolean,
     userInfo? : User | null 
  }

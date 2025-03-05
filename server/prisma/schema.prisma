@@ -43,7 +43,7 @@ model ContractReview {
 
   opportunities               Opportunity[]
   risks                       Risk[] 
-  feedbacks                   UserFeedback[] 
+
 
   compensationStructure       CompensationStructure? 
   contractFinancialTerms      FinancialTerms? 
@@ -98,14 +98,6 @@ model CompensationStructure {
   otherBenefits             String?
 }
 
-
-model UserFeedback {
-  id                        String   @id @default(uuid())
-  contractReviewId          String 
-  contractReview            ContractReview  @relation(fields: [contractReviewId], references: [id])
-  rating                    Float   
-  comments                  String
-}
 
 model FinancialTerms {
   id                        String   @id @default(uuid())

@@ -79,8 +79,7 @@ export default function CreateAccountModal() {
             </Label>
           </div>
       </div>
-      </DialogContent>
-
+     </DialogContent>
     </Dialog>
   )
 }

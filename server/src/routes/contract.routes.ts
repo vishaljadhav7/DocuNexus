@@ -1,7 +1,7 @@
 import express from 'express';
 import { asyncHandler } from '../utils/asyncHandler';
 import { isAuthenticated } from '../middlewares/auth';
-import { recognizeAndConfirmContractType, reviewContract } from '../controllers/contract.controller';
+import { getContractById, recognizeAndConfirmContractType, reviewContract } from '../controllers/contract.controller';
 // recognizeAndConfirmContractType reviewContract
 import { uploadMiddleware } from '../controllers/contract.controller';
 
@@ -13,9 +13,11 @@ contractRouter.post("/recognize-type", isAuthenticated , uploadMiddleware ,recog
 contractRouter.post("/analyze", isAuthenticated , uploadMiddleware , reviewContract);
 
 
-// contractRouter.get("/user-contracts", isAuthenticated , () => {})
 
-// contractRouter.get("/contract/:contractId", isAuthenticated, ()=>{})
+contractRouter.get("/:contractId", isAuthenticated, getContractById)
+
+contractRouter.get("/user-contracts", isAuthenticated , () => {})
+
 
 
 export default contractRouter;

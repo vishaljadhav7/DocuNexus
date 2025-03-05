@@ -7,6 +7,7 @@ import CreateAccountModal from '@/components/Modals/CreateAccountModal'
 
 export default function ModalProvider({ children }: { children: React.ReactNode }) {
    const isModalOpen = useAppSelector((state) => selectIsModalOpen(state, "connectAccountModal"));
+   
   
   return (
     <>

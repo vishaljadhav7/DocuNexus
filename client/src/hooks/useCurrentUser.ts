@@ -1,6 +1,9 @@
+'use client'
+
 import { useGetCurrentUserQuery } from '../features/auth/authApi';
 import { useAppDispatch } from '@/redux/store';
 import { addUser } from '@/features/auth/authSlice';
+import { useEffect } from 'react';
 
 export const useCurrentUser = () => {
   const dispatch = useAppDispatch();
@@ -9,13 +12,13 @@ export const useCurrentUser = () => {
     data,
     isLoading,
     isError,
-  } =  useGetCurrentUserQuery();
+  }  =  useGetCurrentUserQuery();
 
-  console.log("useCurrentUser hook  ->>>> ", data)
+  useEffect(()=>{
+    if(!isLoading && !isError){
+      dispatch(addUser(data))
+    }
+  }, [data, dispatch])
 
-  if(!isLoading && !isError){
-    dispatch(addUser(data))
-  }
-
-  return { isLoading, isError};
+  return { isLoading, isError, data};
 };

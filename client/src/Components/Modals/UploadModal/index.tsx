@@ -16,18 +16,19 @@ import {
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogHeader,
   DialogTitle,
+  DialogTrigger
 } from '@/components/ui/dialog';
+
 
 interface IUploadModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onOpenModal : () => void;
   onUploadComplete: () => void;
 }
 
-export function UploadModal({ isOpen, onClose, onUploadComplete }: IUploadModalProps) {
+export function UploadModal({ isOpen, onClose, onUploadComplete, onOpenModal }: IUploadModalProps) {
   const dispatch = useAppDispatch();
   const router = useRouter();
 
@@ -48,13 +49,10 @@ export function UploadModal({ isOpen, onClose, onUploadComplete }: IUploadModalP
       const formData = new FormData();
       formData.append('contract', files[0]); // Append file first
 
-      console.log('handleFileUpload...... ', files[0]);
-      console.log('FormData contract: ', formData.get('contract')); // Now logs the file
-
       recognizeContractType(formData)
         .unwrap()
         .then((data) => {
-          setDetectedType(data); // Assuming data is a string (e.g., "Rental Agreement")
+          setDetectedType(data); //
           setStep('confirm');
         })
         .catch((error) => {
@@ -71,15 +69,13 @@ export function UploadModal({ isOpen, onClose, onUploadComplete }: IUploadModalP
       const formData = new FormData();
       formData.append('contract', files[0]);
       formData.append('contractType', detectedType);
-
-      console.log('handleAnalyzeContract...... ', files[0], detectedType);
-      console.log('FormData contract: ', formData.get('contract'));
-      console.log('FormData contractType: ', formData.get('contractType'));
-
+      
       analyzeContract(formData)
         .unwrap()
         .then((data) => {
-          dispatch(setAnalysisResults(data?.data?.data || data?.data));
+           console.log("data after analyzing the contract upload model ---->>>>>> ", data)  
+          //setAnalysisResults
+          dispatch(setAnalysisResults(data));
           setStep('done');
           onUploadComplete();
         })
@@ -258,7 +254,7 @@ export function UploadModal({ isOpen, onClose, onUploadComplete }: IUploadModalP
                 </AlertDescription>
               </Alert>
               <motion.div className="mt-6 flex flex-col space-y-3 relative">
-                <Button onClick={() => router.push('/dashboard/results')}>
+                <Button onClick={() => router.push('/dashboard/outcomes')}>
                   View results
                 </Button>
                 <Button variant="outline" onClick={handleClose}>
@@ -274,9 +270,12 @@ export function UploadModal({ isOpen, onClose, onUploadComplete }: IUploadModalP
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={handleClose}>
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="outline" >Upload File</Button>
+      </DialogTrigger>
       <DialogContent>
-        <DialogTitle>Upload File</DialogTitle>
+       <DialogTitle>Upload Any Contract File</DialogTitle>
         {error && (
           <Alert variant="destructive">
             <AlertTitle>Error</AlertTitle>

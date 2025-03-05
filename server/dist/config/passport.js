@@ -19,33 +19,31 @@ const prisma = new client_1.PrismaClient();
 exports.default = passport_1.default.use(new passport_google_oauth20_1.Strategy({
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-    callbackURL: "http://localhost:4000/auth/google/callback",
-    scope: ["profile", "email"]
-}, (accessToken, refreshToken, profile, done) => __awaiter(void 0, void 0, void 0, function* () {
+    callbackURL: process.env.CALLBACK_URL,
+    scope: ["profile", "email"],
+    passReqToCallback: true
+}, (req, accessToken, refreshToken, profile, done) => __awaiter(void 0, void 0, void 0, function* () {
     let user;
+    if (!profile)
+        throw new Error("Profile not found");
     try {
         user = yield prisma.user.findUnique({
             where: { googleId: profile.id }
         });
-    }
-    catch (error) {
-        return done(error, false);
-    }
-    try {
         if (!user) {
-            prisma.user.create({
+            user = yield prisma.user.create({
                 data: {
                     googleId: profile.id,
-                    userName: profile.username,
+                    userName: profile.displayName,
                     emailId: profile.emails[0].value,
                     isPremium: false,
                 }
             });
         }
-        return done(null, user);
+        done(null, user);
     }
     catch (error) {
-        return done(error, false);
+        done(error, false);
     }
 })));
 passport_1.default.serializeUser((user, done) => {
