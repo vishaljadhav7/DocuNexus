@@ -21,14 +21,11 @@ import {
 } from '@/components/ui/dialog';
 
 
-interface IUploadModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onOpenModal : () => void;
-  onUploadComplete: () => void;
-}
+// interface IUploadModalProps {
+//   onClose: () => void;
+// }
 
-export function UploadModal({ isOpen, onClose, onUploadComplete, onOpenModal }: IUploadModalProps) {
+export function UploadModal() {
   const dispatch = useAppDispatch();
   const router = useRouter();
 
@@ -73,11 +70,11 @@ export function UploadModal({ isOpen, onClose, onUploadComplete, onOpenModal }: 
       analyzeContract(formData)
         .unwrap()
         .then((data) => {
-           console.log("data after analyzing the contract upload model ---->>>>>> ", data)  
+         
           //setAnalysisResults
           dispatch(setAnalysisResults(data));
           setStep('done');
-          onUploadComplete();
+        
         })
         .catch((error) => {
           console.error('Analysis error:', error);
@@ -105,7 +102,7 @@ export function UploadModal({ isOpen, onClose, onUploadComplete, onOpenModal }: 
   });
 
   const handleClose = () => {
-    onClose();
+  
     setFiles([]);
     setDetectedType(null);
     setError(null);
@@ -272,7 +269,7 @@ export function UploadModal({ isOpen, onClose, onUploadComplete, onOpenModal }: 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" >Upload File</Button>
+        <Button variant="outline" className='bg-black text-white'>New Contract</Button>
       </DialogTrigger>
       <DialogContent>
        <DialogTitle>Upload Any Contract File</DialogTitle>

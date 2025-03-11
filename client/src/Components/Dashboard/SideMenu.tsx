@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { FileText, Home, LayoutDashboard, Settings } from "lucide-react";
+import { FileText, LayoutDashboard, Settings } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { ElementType } from "react";
@@ -20,11 +20,6 @@ const SideMenuContent = () => {
   const pathname = usePathname();
 
   const sidebarItems = [
-    {
-      icon: Home,
-      label: "Home",
-      href: "/",
-    },
     {
       icon: LayoutDashboard,
       label: "Dashboard",

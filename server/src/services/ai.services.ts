@@ -5,8 +5,9 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { promptForContractRecognition, promptForReviewingContract } from "../utils/promptsForAI";
 import { Impact, Severity } from "@prisma/client";
 const AI_MODEL = 'gemini-1.5-flash';
+
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_KEY!);
-// const aiModel = genAI.getGenerativeModel({ model: AI_MODEL });
+
 const aiModel = genAI.getGenerativeModel({ model: AI_MODEL });
 class PDFProcessingError extends Error {
   cause: any;
@@ -92,8 +93,6 @@ export const retrieveTextFromPDF = async (
 ): Promise<string> => {
   // Validate input
 
-
-
   if (typeof fileKey !== 'string' || fileKey.trim() === '') {
     throw new PDFProcessingError('File key must be a non-empty string');
   }
@@ -139,10 +138,9 @@ export const recognizeContractType = async ( contractText: string) : Promise<str
   }
 }
 
-//@ts-ignore
+
 export const reviewContractWithAI = async (
   contractText: string,
-  tier: "free" | "premium",
   contractType: string
 ): Promise<Partial<Analysis>> => {
   let prompt = `
@@ -195,6 +193,8 @@ Contract text:
 
   const results = await aiModel.generateContent(prompt);
 
+  // console.log("reultts ", results.response.text() )
+
   if (!results) throw new Error("Could not analyze!");
 
   let text = results.response.text()
@@ -222,7 +222,7 @@ Contract text:
         summary: "Error analyzing contract",
       };
 
-     //@ts-ignore
+  
       // Parse risks
       fallback.risks = (text.match(/"risks"\s*:\s*\[([\s\S]*?)\]/)?.[1]?.split("},") || []).map((item) => {
         const riskMatch = item.match(/"risk"\s*:\s*"([^"]*)"/i);
@@ -231,11 +231,11 @@ Contract text:
         return {
           risk: riskMatch?.[1] || "Unknown",
           riskDetails: explanationMatch?.[1] || "Unknown",
-          severity : severityMatch?.[1] || "Unknown",
+          severity : severityMatch?.[1] as Severity || "Unknown",
         };
       });
 
-      //@ts-ignore
+     
       // Parse opportunities
       fallback.opportunities = (text.match(/"opportunities"\s*:\s*\[([\s\S]*?)\]/)?.[1]?.split("},") || []).map((item) => {
         const opportunityMatch = item.match(/"opportunity"\s*:\s*"([^"]*)"/i);
@@ -244,7 +244,7 @@ Contract text:
         return {
           opportunity: opportunityMatch?.[1] || "Unknown",
           opportunityDetails: explanationMatch?.[1] || "Unknown",
-          impact : impactMatch?.[1] || "Unknown",
+          impact : impactMatch?.[1] as Impact|| "Unknown",
         };
       });
 

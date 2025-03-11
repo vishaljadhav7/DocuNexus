@@ -51,8 +51,9 @@ const upload = multer({
      res.status(201).json(new ApiResponse(200, recognizedType, "type detected successfully"))
 
     } catch (error : any) {
-
       res.status(400).json(new ApiError(400, `Error : ${error.message}`))  
+    } finally {
+      prisma.$disconnect()
     }
   }
 
@@ -70,15 +71,10 @@ const upload = multer({
       await redis.set(fileKey, req.file.buffer);
       await redis.expire(fileKey, 3600);
 
-      const textualPdf = await retrieveTextFromPDF(fileKey);
-
-      let analysis ;
-      if (!user.isPremium) {
-        analysis = await reviewContractWithAI(textualPdf, "premium", contractType);
-      } else {
-        analysis = await reviewContractWithAI(textualPdf, "free", contractType);
-      }
+      const textualPdf = await retrieveTextFromPDF(fileKey);  
     
+      const analysis = await reviewContractWithAI(textualPdf,  contractType);
+      
 
       if (!analysis.summary || !analysis.risks || !analysis.opportunities){
         throw new Error("Failed to analyze contract");
@@ -138,46 +134,35 @@ const upload = multer({
      } catch (error : any) {
         console.error(`${error.message}`)
         res.status(200).json(`Error : ${error.message}`)
-     }
-  }
-
-
-  export const getContractById = async (req: Request, res: Response) => {
-    try {
-      const user : any = req.user;
-      const contractId = req.params.contractId
-      const contract =  await prisma.contractReview.findUnique({
-        where : {
-          userId : user.id,
-          id : contractId
-        }
-      })
-
-      if(!contract){
-         throw new Error("Could not fetch contract for given contractId")   
-      }
-
-      res.status(201).json(new ApiResponse(201, contract, "contract fetched  for given contractId"))
-    } catch (error : any) {
-      res.status(401).json(new ApiError(401, `Error : ${error.message}`))
+     } finally {
+      prisma.$disconnect()
     }
   }
 
-  export const getAllContracts = async (req: Request, res: Response) => { 
+
+  export const getContracts = async (req: Request, res: Response) => {
     try {
       const user : any = req.user;
-      const allContracts =  await prisma.contractReview.findMany({
-        where : {
-          userId : user.id,
-        }
-      })
+      // const contractId = req.params.contractId
+      // const contract =  await prisma.contractReview.findUnique({
+      //   where : {
+      //     userId : user.id,
+      //     id : contractId
+      //   }
+      // })
 
-      if(!allContracts.length){
-         throw new Error("Could not fetch contract for given contractId")   
-      }
-
-      res.status(201).json(new ApiResponse(201, allContracts, "contract fetched  for given contractId"))
+      // if(!contract){
+      //    throw new Error("Could not fetch contract for given contractId")   
+      // }
+       const all = await prisma.contractReview.findMany({});
+       const userContracts = all.filter(contract => contract.userId === user.id);
+       console.log("userContracts =>>>>> ",req.user)   
+      res.status(201).json(new ApiResponse(201, userContracts, "contract fetched  for given contractId"))
     } catch (error : any) {
       res.status(401).json(new ApiError(401, `Error : ${error.message}`))
+    } finally {
+      prisma.$disconnect()
     }
   }
+
+

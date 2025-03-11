@@ -7,11 +7,11 @@ import { motion } from "framer-motion"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion"
-import { useAppSelector } from "@/redux/store"
 import OverallScoreChart from "./Chart"
+import { Analysis } from "@/features/contracts/contractSlice"
 
-export default function ContractReview() {
-  const analysisResults = useAppSelector((store) => store.contract.analysisResults)
+export default function ContractReview({analysisResults} : {analysisResults : Analysis | undefined}) {
+
   const [activeTab, setActiveTab] = useState("summary")
 
   if (!analysisResults) {

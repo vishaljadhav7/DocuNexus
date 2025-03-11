@@ -48,7 +48,7 @@ const contractSlice = createSlice({
   reducers: {
     setAnalysisResults: (state, action: PayloadAction<Analysis>) => {
       state.analysisResults = action.payload;
-    },
+    }
   },
 });
 

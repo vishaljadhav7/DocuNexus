@@ -19,24 +19,27 @@ const prisma = new PrismaClient();
       if(!profile) throw new Error("Profile not found");
 
       try {
-        user = await prisma.user.findUnique({ 
-            where : {googleId : profile.id}
-        });
-        
-        if(!user){
-        user = await prisma.user.create({
-              data : {
-                  googleId : profile.id,
-                  userName : profile.displayName! ,
-                  emailId : profile.emails![0].value,
-                  isPremium : false,
-              }
-          })
-        }
+   
+       user = await prisma.user.findUnique({ 
+           where : {googleId : profile.id}
+       });
+       
+       if(!user){
+       user = await prisma.user.create({
+         data : {
+           googleId : profile.id,
+           userName : profile.displayName! ,
+           emailId : profile.emails![0].value,
+           isPremium : false,
+         }
+        })
+       }
   
        done(null, user as User)
       } catch (error) {
           done(error, false)
+      }finally{
+        prisma.$disconnect()
       }
       
     })
@@ -48,13 +51,17 @@ passport.serializeUser((user: any, done) => {
 });
 
 passport.deserializeUser( async (userId : string, done) => {
-    let user : User | null;
-    try {
-      user = await prisma.user.findUnique({ 
-        where : {id : userId}
-      });
-      return user ? done(null, user) : done(null, null);
+  let user : User  | null;
+  try {
+   
+    user = await prisma.user.findUnique({ 
+      where : {id : userId}
+    });
+    console.log("passport.deserializeUser =>>>> ",user )
+    return user ? done(null, user) : done(null, null);
     } catch (error) {
       done(error, null) 
+    }finally{
+      prisma.$disconnect()
     }
 })

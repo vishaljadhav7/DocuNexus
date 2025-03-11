@@ -1,41 +1,53 @@
-// process.env.NEXT_PUBLIC_API_URL
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { Analysis } from "./contractSlice";
 
 export const contractApi = createApi({
-  reducerPath : "contractApi",
-  baseQuery : fetchBaseQuery ({ 
-    baseUrl : "http://localhost:4000",
-    credentials: 'include',     
+  reducerPath: "contractApi",
+  baseQuery: fetchBaseQuery({
+    baseUrl: "http://localhost:4000",
+    credentials: 'include',
   }),
-  endpoints : (builder) => ({
-    recognizeContractType : builder.mutation({
-      query : (formData) => ({
-        url : "/contract/recognize-type",
-        method : "POST",
-        body : formData,
+  tagTypes: ["Contract"],
+  endpoints: (builder) => ({
+    recognizeContractType: builder.mutation<string, FormData>({
+      query: (formData) => ({
+        url: "/contract/recognize-type",
+        method: "POST",
+        body: formData,
       }),
-      transformResponse: (res: {detectedType : string}) => {
-        console.log("res  ", res)
-        return res.data        
+      transformResponse: (res: { data: string }) => {
+        console.log("res recognizeContractType rtk query ", res);
+        return res.data;
       },
     }),
-    analyzeContract: builder.mutation<any, FormData>({
+
+    analyzeContract: builder.mutation<Analysis, FormData>({
       query: (formData) => ({
         url: '/contract/analyze',
         method: 'POST',
         body: formData,
       }),
       transformResponse: (res: any) => {
-        console.log("analyzeContract <<<<>>>>><<<>>>  ", res)
-        return res.data        
+        console.log("res analyzeContract rtk query ", res);    
+        return res.data;
+      },
+      invalidatesTags: ["Contract"],
+    }),
+//contract/all
+    fetchContracts: builder.query<Analysis, void>({
+      query: () => '/contract/all',
+      transformResponse: (res: any) => {
+        console.log("res fetchContract rtk query ", res);
+        return res.data;
       },
     }),
-    
-  })
+
+  }),
 });
 
+export const {
+  useRecognizeContractTypeMutation,
+  useAnalyzeContractMutation,
+  useFetchContractsQuery,
 
-export const {useRecognizeContractTypeMutation, useAnalyzeContractMutation} =  contractApi;
-
- 
-
+} = contractApi;

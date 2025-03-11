@@ -75,16 +75,6 @@ CREATE TABLE "CompensationStructure" (
 );
 
 -- CreateTable
-CREATE TABLE "UserFeedback" (
-    "id" TEXT NOT NULL,
-    "contractReviewId" TEXT NOT NULL,
-    "rating" DOUBLE PRECISION NOT NULL,
-    "comments" TEXT NOT NULL,
-
-    CONSTRAINT "UserFeedback_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "FinancialTerms" (
     "id" TEXT NOT NULL,
     "contractReviewId" TEXT NOT NULL,
@@ -117,9 +107,6 @@ ALTER TABLE "Opportunity" ADD CONSTRAINT "Opportunity_contractReviewId_fkey" FOR
 
 -- AddForeignKey
 ALTER TABLE "CompensationStructure" ADD CONSTRAINT "CompensationStructure_contractReviewId_fkey" FOREIGN KEY ("contractReviewId") REFERENCES "ContractReview"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "UserFeedback" ADD CONSTRAINT "UserFeedback_contractReviewId_fkey" FOREIGN KEY ("contractReviewId") REFERENCES "ContractReview"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "FinancialTerms" ADD CONSTRAINT "FinancialTerms_contractReviewId_fkey" FOREIGN KEY ("contractReviewId") REFERENCES "ContractReview"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
