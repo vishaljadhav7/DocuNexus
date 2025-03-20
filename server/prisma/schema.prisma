@@ -1,0 +1,114 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL3")
+}
+
+enum Severity {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum Impact {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+model User { 
+ id                    String   @id @default(uuid())
+ userName              String   
+ emailId               String   @unique
+ password              String
+ profilePic            String    @default("https://plus.unsplash.com/premium_photo-1739786996022-5ed5b56834e2?q=80&w=1480")  
+
+ isPremium             Boolean
+ userContractReviews   ContractReview[] 
+} 
+
+
+
+model ContractReview {
+  id                          String   @id @default(uuid())
+  contractText                String  
+  summary                     String   
+  contractType                String    
+  
+  userId                      String    
+  user                        User     @relation(fields: [userId], references: [id])
+
+  opportunities               Opportunity[]
+  risks                       Risk[]          
+
+
+  compensationStructure       CompensationStructure? 
+  contractFinancialTerms      FinancialTerms? 
+ 
+  recommendations             String[]   
+  clauses                     String[] 
+  performanceMetrics          String[] 
+  negotiationPoints           String[]
+
+  legalCompliance             String?
+  contractDuration            String?  
+  terminationConditions       String? 
+  overallScore                Int  
+
+  createdAt                   DateTime  @default(now())
+  expirationDate              DateTime?
+  
+  language                    String @default("en")
+  aiModel                     String @default("gemini-pro")
+  version                     Int @default(1)
+}
+
+
+
+model Risk {
+   id                  String   @id @default(uuid())
+   risk                String 
+   riskDetails         String
+   contractReviewId    String 
+   contractReview      ContractReview  @relation(fields: [contractReviewId], references: [id], onDelete: Cascade)
+   severity            Severity
+}
+
+
+model Opportunity {
+  id                        String   @id @default(uuid())
+  opportunity               String
+  opportunityDetails        String
+  impact                    Impact 
+  contractReviewId          String 
+  contractReview            ContractReview  @relation(fields: [contractReviewId], references: [id], onDelete: Cascade)
+}
+
+model CompensationStructure {
+  id                        String   @id @default(uuid())
+  contractReviewId          String   @unique
+  contractReview            ContractReview  @relation( fields: [contractReviewId], references: [id], onDelete: Cascade) 
+  
+  baseSalary                String?
+  bonuses                   String?
+  equity                    String?
+  otherBenefits             String?
+}
+
+
+model FinancialTerms {
+  id                        String   @id @default(uuid())
+  contractReviewId          String   @unique 
+  contractReview            ContractReview  @relation(fields: [contractReviewId], references: [id], onDelete: Cascade)
+  description               String
+  details                   String[]  
+}
+
+model Session {
+  sid    String   @id
+  sess   Json
+  expire DateTime
+}
