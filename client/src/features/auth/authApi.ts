@@ -16,6 +16,8 @@ export const authApi = createApi({
       baseUrl: process.env.NEXT_PUBLIC_API_URL, 
       credentials: 'include', 
       prepareHeaders: (headers) => {
+        console.log('Request Headers:', Object.fromEntries(headers));
+        console.log('Cookies Sent (JS visible):', document.cookie); // httpOnly cookies won’t show
         return headers;
       },
     }),

@@ -16,10 +16,14 @@ app.use(cors({
     credentials: true, 
 }));
 
-app.use(helmet());
-app.use(morgan("dev"));
+
 app.use(express.json({limit : "16kb"}));
 app.use(express.urlencoded({ extended: true }));
+
+app.set('trust proxy', 1); 
+app.use(helmet());
+app.use(morgan("dev"));
+
 
 
 app.use(session({
@@ -27,7 +31,6 @@ app.use(session({
     secret: process.env.SECRET_KEY!,
     resave: false,
     saveUninitialized: false,
-    rolling: true,
     cookie: {
       maxAge: 60 * 60 * 1000, 
       httpOnly: true,
