@@ -11,7 +11,7 @@ import { loadUser } from './middlewares/auth';
 const app = express();
 
 app.use(cors({
-    origin: "http://localhost:3000",
+    origin: ["http://localhost:3000", "https://docu-nexus.vercel.app"],
     methods: ["GET", "POST", "PATCH", "DELETE", "PUT"],
     credentials: true, 
 }));
@@ -29,7 +29,7 @@ app.use(session({
     saveUninitialized: false,
     rolling: true,
     cookie: {
-      maxAge: 60 * 60 * 1000, // 24 hours
+      maxAge: 60 * 60 * 1000, 
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
@@ -42,5 +42,8 @@ app.use(loadUser);
 app.use('/auth', authRouter);
 app.use("/contract", contractRouter)
 
+app.get("/", (req : Request, res: Response) => {
+  res.status(200).send("healthy server")
+})
 
 export {app};     
