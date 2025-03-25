@@ -17,8 +17,8 @@ export const authApi = createApi({
     credentials: 'include',
     mode: 'cors', 
     prepareHeaders: (headers) => {
-      console.log('Request Headers:', Object.fromEntries(headers));
-      console.log('Cookies Sent (JS visible):', document.cookie); // httpOnly cookies won’t show
+      // console.log('Request Headers:', Object.fromEntries(headers));
+      // console.log('Cookies Sent (JS visible):', document.cookie); 
       return headers;
     },
   }),

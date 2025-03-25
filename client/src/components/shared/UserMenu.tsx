@@ -4,7 +4,7 @@ import { useAppSelector, useAppDispatch } from "@/redux/store";
 import { RootState } from "@/redux/store";
 import { Button } from "../ui/button";
 import Link from "next/link";
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar,  AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,7 +25,7 @@ function UserMenu() {
   const handleSignOut = async () => {
     try {
       await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`, {}, {
-        withCredentials: true, // Ensure this is in the config
+        withCredentials: true,
       });
       dispatch(removeUser());
       router.push("/");
@@ -34,9 +34,6 @@ function UserMenu() {
     }
   };
   
-  if(!user) {
-    return <div>loading...</div>
-  }
 
   return (
      
