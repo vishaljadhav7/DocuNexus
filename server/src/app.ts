@@ -11,12 +11,10 @@ import { loadUser } from './middlewares/auth';
 const app = express();
 
 app.use(cors({
-    origin: ["http://localhost:3000", "https://docu-nexus.vercel.app"],
-    methods: ["GET", "POST", "PATCH", "DELETE", "PUT"],
-    credentials: true, 
+  origin: ["http://localhost:3000", "https://docu-nexus.vercel.app"],
+  methods: ["GET", "POST", "PATCH", "DELETE", "PUT"],
+  credentials: true,
 }));
-
-
 app.use(express.json({limit : "16kb"}));
 app.use(express.urlencoded({ extended: true }));
 
@@ -38,6 +36,8 @@ app.use(session({
       sameSite: 'none',
     },
   }));
+
+
 
 
 app.use(loadUser);

@@ -19,8 +19,6 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
-
-      
       <section className="py-16 md:py-24 flex items-center justify-center bg-gradient-to-br from-gray-50 to-white">
         <div className="container px-4 max-w-5xl text-center">
           <div className="inline-flex items-center gap-2 bg-white/80 px-4 py-2 rounded-full shadow-sm mb-6 animate-in fade-in zoom-in-95">
@@ -34,9 +32,11 @@ export default function Home() {
             Simplify reviews, spot risks, and save time with cutting-edge AI
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/signup">
             <Button size="lg" className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-lg transform hover:scale-105 transition-all">
               Start Free <ArrowRight className="ml-2 w-5 h-5" />
             </Button>
+            </Link>
             <Button size="lg" variant="outline" className="border-gray-300 hover:bg-gray-100 shadow-lg transform hover:scale-105 transition-all">
               See Demo
             </Button>

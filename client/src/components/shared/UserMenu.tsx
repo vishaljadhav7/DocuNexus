@@ -33,6 +33,7 @@ function UserMenu() {
       console.error(error);
     }
   };
+  
   if(!user) {
     return <div>loading...</div>
   }
@@ -45,9 +46,6 @@ function UserMenu() {
           <Button variant="ghost" className="size-8 rounded-full">
             <Avatar className="size-8">
               <AvatarImage src={user?.userInfo?.profilePic || user?.userInfo?.userName} />
-              <AvatarFallback>
-                {user?.userInfo?.userName.charAt(0) || ""}
-              </AvatarFallback>
             </Avatar>
           </Button>
         </DropdownMenuTrigger>

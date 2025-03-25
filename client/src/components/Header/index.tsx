@@ -1,22 +1,17 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+
 import { Button } from "../ui/button";
 import {  useAppSelector } from "@/redux/store";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-const navItems = [
-  { name: "Dashboard", href: "/dashboard" },
-  { name: "Pricing", href: "/pricing" },
-];
 
 export function Header() {
   const { isAuthenticated } = useAppSelector((store) => store.user);
   const router = useRouter();
-  const pathname = usePathname();
+
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -38,25 +33,8 @@ export function Header() {
           </span>
         </Link>
 
-        {/* Navigation */}
+      
         <div className="flex items-center gap-8">
-          <nav className="hidden md:flex items-center gap-6">
-            {navItems.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className={cn(
-                  "text-sm font-medium relative py-1",
-                  "hover:text-indigo-600 transition-colors",
-                  pathname === item.href
-                    ? "text-indigo-600 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-indigo-600"
-                    : "text-gray-600"
-                )}
-              >
-                {item.name}
-              </Link>
-            ))}
-          </nav>
 
           {/* Sign In Button */}
           <Link 
