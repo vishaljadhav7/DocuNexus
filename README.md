@@ -1,5 +1,4 @@
 ## Demo of Docu Nexus
 
-
-https://github.com/user-attachments/assets/b893958f-eb85-4747-af21-419ba57a1ccb
+Drive Link : https://drive.google.com/file/d/10lZaKRWi8NLOsV8IupGwZDrCxAj8O9Y0/view?usp=drivesdk
 
