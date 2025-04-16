@@ -28,7 +28,7 @@ export const useCurrentUser = () => {
       dispatch(addUser(transformedUser));
       router.push("/dashboard")
     }
-  }, [apiUser, dispatch, isLoading, dispatch]);
+  }, [apiUser, dispatch, isLoading, isError, router]);
 
   return { isLoading, isError, data: apiUser };
 };

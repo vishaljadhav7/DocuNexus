@@ -405,7 +405,7 @@ export default function Home() {
                     ))}
                   </div>
                   <p className="text-base text-gray-600 italic mb-4">
-                    "{testimonial.quote}"
+                    {testimonial.quote} 
                   </p>
                   <div className="flex items-center gap-4">
                     <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center">
