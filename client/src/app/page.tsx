@@ -1,142 +1,640 @@
-import { ArrowRight, Sparkles, Mail, Phone, Twitter } from "lucide-react";
+// app/page.tsx
+"use client";
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/Header";
+import {
+  ArrowRight,
+  Sparkles,
+  Star,
+  User,
+  Clock,
+  Upload,
+  Search,
+  FileText,
+  Shield,
+  AlertCircle,
+  ChevronRight,
+  BarChart2,
+  FileCheck,
+  AlertTriangle,
+} from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function Home() {
   const features = [
-    { title: "Smart Analysis", desc: "AI-powered review in seconds", color: "from-blue-500 to-blue-600" },
-    { title: "Risk Spotter", desc: "Find risks instantly", color: "from-green-500 to-green-600" },
-    { title: "Time Saver", desc: "Cut review time by 90%", color: "from-purple-500 to-purple-600" },
+    {
+      title: "Smart Analysis",
+      desc: "Get AI-driven insights in seconds",
+      color: "from-blue-100 to-blue-50",
+      icon: <Sparkles className="w-5 h-5 text-blue-600" />,
+    },
+    {
+      title: "Risk Detection",
+      desc: "Instantly identify potential issues",
+      color: "from-teal-100 to-teal-50",
+      icon: <Shield className="w-5 h-5 text-teal-600" />,
+    },
+    {
+      title: "Time Efficiency",
+      desc: "Reduce review time by up to 90%",
+      color: "from-purple-100 to-purple-50",
+      icon: <Clock className="w-5 h-5 text-purple-600" />,
+    },
   ];
 
-  const stats = [
-    { value: "10x", label: "Faster Reviews" },
-    { value: "90%", label: "Time Saved" },
-    { value: "5k+", label: "Happy Users" },
+  const testimonials = [
+    {
+      quote:
+        "This platform transformed our workflow, saving hours on every contract review.",
+      author: "Emma T.",
+      position: "General Counsel",
+      company: "LegalTech Inc.",
+      icon: <User className="w-10 h-10 text-indigo-600" />,
+    },
+    {
+      quote:
+        "The AI insights have helped us identify critical issues we would have missed otherwise.",
+      author: "Michael R.",
+      position: "Contract Manager",
+      company: "Enterprise Solutions",
+      icon: <User className="w-10 h-10 text-indigo-600" />,
+    },
   ];
+
+  const companies = ["Notion", "Dribble", "Dropbox"];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 font-sans">
       <Header />
-      <section className="py-16 md:py-24 flex items-center justify-center bg-gradient-to-br from-gray-50 to-white">
-        <div className="container px-4 max-w-5xl text-center">
-          <div className="inline-flex items-center gap-2 bg-white/80 px-4 py-2 rounded-full shadow-sm mb-6 animate-in fade-in zoom-in-95">
-            <Sparkles className="w-4 h-4 text-blue-500" />
-            <span className="text-sm font-medium">AI Contract Revolution</span>
-          </div>
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-700 bg-clip-text text-transparent">
-            Transform Your Contracts <br /> with AI Magic
-          </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
-            Simplify reviews, spot risks, and save time with cutting-edge AI
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/signup">
-            <Button size="lg" className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-lg transform hover:scale-105 transition-all">
-              Start Free <ArrowRight className="ml-2 w-5 h-5" />
-            </Button>
-            </Link>
-            <Button size="lg" variant="outline" className="border-gray-300 hover:bg-gray-100 shadow-lg transform hover:scale-105 transition-all">
-              See Demo
-            </Button>
-          </div>
-        </div>
-      </section>
-
-     
-      <section className="py-12 bg-white border-t border-b border-gray-100">
-        <div className="container px-4 max-w-5xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            {stats.map((stat) => (
-              <div key={stat.label}>
-                <div className="text-4xl font-bold text-blue-600 mb-2">{stat.value}</div>
-                <div className="text-gray-600">{stat.label}</div>
+      <main>
+        {/* Hero Section */}
+        <motion.section
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8 }}
+          className="py-20 md:py-32 bg-gradient-to-br from-blue-100 via-indigo-100 to-purple-100"
+        >
+          <div className="container px-6 mx-auto max-w-5xl">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              {/* Hero intro */}
+              <div className="text-center lg:text-left">
+                <motion.div
+                  initial={{ scale: 0.9, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                  className="inline-flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm mb-6 border border-gray-200"
+                >
+                  <Sparkles className="w-4 h-4 text-indigo-500" />
+                  <span className="text-sm font-medium text-gray-700">Powered by AI</span>
+                </motion.div>
+                <h1 className="text-4xl md:text-5xl font-semibold tracking-tight mb-6 text-gray-900">
+                  Simplify Contracts with <span className="text-indigo-600">AI Precision</span>
+                </h1>
+                <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl mx-auto lg:mx-0">
+                  Review smarter, reduce risks, and save time with intelligent contract analysis built for your team.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                  <Link href="/signup">
+                    <Button
+                      size="lg"
+                      className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg px-8 py-3 shadow-md transition-transform hover:scale-105"
+                    >
+                      Try for Free <ArrowRight className="ml-2 w-5 h-5" />
+                    </Button>
+                  </Link>
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="border-gray-300 bg-white hover:bg-gray-50 text-gray-700 font-medium rounded-lg px-8 py-3 shadow-md transition-transform hover:scale-105"
+                  >
+                    Watch Demo
+                  </Button>
+                </div>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.4 }}
+                  className="mt-12"
+                >
+                  <p className="text-sm text-gray-500 mb-4">Trusted by leading companies</p>
+                  <div className="flex flex-wrap gap-6 justify-center lg:justify-start">
+                    {companies.map((company, index) => (
+                      <span key={index} className="text-gray-500 font-medium hover:text-gray-700 transition-colors">
+                        {company}
+                      </span>
+                    ))}
+                  </div>
+                </motion.div>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
-    
-      <section className="py-16 bg-white">
-        <div className="container px-4 max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12 text-gray-900">Why Choose Us?</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {features.map((feature) => (
-              <div key={feature.title} className="group relative overflow-hidden rounded-xl p-6 bg-white shadow-md hover:shadow-xl transition-all duration-300">
-                <div className={`absolute inset-0 bg-gradient-to-br ${feature.color} opacity-0 group-hover:opacity-10 transition-opacity`} />
-                <h3 className="text-xl font-semibold mb-2 text-gray-900 relative z-10">{feature.title}</h3>
-                <p className="text-gray-600 relative z-10">{feature.desc}</p>
+              {/* Contract card */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.8, delay: 0.3 }}
+                className="relative hidden md:block"
+              >
+                <div className="relative bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-100 p-8">
+                  {/* Gradient header bar with enhanced design */}
+                  <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-500"></div>
+
+                  <div className="space-y-6">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <div className="bg-indigo-50 p-1.5 rounded-md">
+                          <FileText className="w-5 h-5 text-indigo-600" />
+                        </div>
+                        <span className="font-semibold text-gray-900">Contract Analysis</span>
+                      </div>
+                      <div className="flex items-center gap-2 bg-green-50 px-3 py-1 rounded-full border border-green-100">
+                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                        <span className="text-sm text-green-700 font-medium">Processing</span>
+                      </div>
+                    </div>
+
+                    {/* Document sections with improved visual design */}
+                    <div className="space-y-4">
+                      <div className="h-8 bg-gray-100 rounded-md w-full flex items-center px-3">
+                        <div className="w-4 h-4 bg-indigo-200 rounded-full mr-2"></div>
+                        <div className="h-3 bg-gray-200 rounded w-1/3"></div>
+                      </div>
+                      <div className="h-8 bg-gray-100 rounded-md w-3/4 flex items-center px-3">
+                        <div className="w-4 h-4 bg-green-200 rounded-full mr-2"></div>
+                        <div className="h-3 bg-gray-200 rounded w-1/4"></div>
+                      </div>
+                      <div className="h-8 bg-gray-100 rounded-md w-5/6 flex items-center px-3">
+                        <div className="w-4 h-4 bg-amber-200 rounded-full mr-2"></div>
+                        <div className="h-3 bg-gray-200 rounded w-2/5"></div>
+                      </div>
+                      <div className="h-8 bg-gray-100 rounded-md w-2/3 flex items-center px-3">
+                        <div className="w-4 h-4 bg-red-200 rounded-full mr-2"></div>
+                        <div className="h-3 bg-gray-200 rounded w-1/4"></div>
+                      </div>
+                    </div>
+
+                    {/* Enhanced alert cards */}
+                    <div className="flex items-center gap-3 bg-indigo-50 p-4 rounded-lg border border-indigo-100">
+                      <div className="bg-white p-1.5 rounded-full shadow-sm">
+                        <AlertCircle className="text-indigo-600 w-5 h-5 flex-shrink-0" />
+                      </div>
+                      <div>
+                        <div className="text-sm font-semibold text-gray-900">Risk detected in Section 3.2</div>
+                        <div className="text-xs text-gray-500">Liability clause needs review</div>
+                      </div>
+                      <div className="ml-auto bg-indigo-100 rounded-full p-1">
+                        <ChevronRight className="w-4 h-4 text-indigo-600" />
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-3 bg-green-50 p-4 rounded-lg border border-green-100">
+                      <div className="bg-white p-1.5 rounded-full shadow-sm">
+                        <Shield className="text-green-600 w-5 h-5 flex-shrink-0" />
+                      </div>
+                      <div>
+                        <div className="text-sm font-semibold text-gray-900">Compliant with regulations</div>
+                        <div className="text-xs text-gray-500">All required clauses present</div>
+                      </div>
+                      <div className="ml-auto bg-green-100 rounded-full p-1">
+                        <ChevronRight className="w-4 h-4 text-green-600" />
+                      </div>
+                    </div>
+
+                    {/* Enhanced footer */}
+                    <div className="pt-4 border-t border-gray-100 flex justify-between items-center">
+                      <div className="text-sm text-gray-500 flex items-center gap-1.5">
+                        <Clock className="w-4 h-4 text-gray-400" />
+                        Analysis complete: 2 min ago
+                      </div>
+                      <Button size="sm" className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-4">
+                        View Report
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Enhanced floating cards */}
+                <div className="absolute -bottom-6 -left-6 bg-white p-4 rounded-lg shadow-lg border border-gray-100 flex items-center gap-3">
+                  <div className="bg-red-50 p-1.5 rounded-full">
+                    <AlertTriangle className="text-red-500 w-5 h-5" />
+                  </div>
+                  <div>
+                    <div className="text-sm font-semibold text-gray-900">Risk detected</div>
+                    <div className="text-xs text-gray-500">Section 3.2</div>
+                  </div>
+                </div>
+
+                <div className="absolute -top-4 -right-4 bg-white p-4 rounded-lg shadow-lg border border-gray-100">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <span className="text-sm font-semibold text-gray-900">Analysis complete</span>
+                  </div>
+                </div>
+
+                {/* Additional floating elements */}
+                <div className="absolute top-1/3 -right-5 bg-white p-3 rounded-lg shadow-lg border border-gray-100">
+                  <div className="flex flex-col items-center gap-1">
+                    <BarChart2 className="text-indigo-600 w-5 h-5" />
+                    <span className="text-xs font-semibold text-gray-900">3 Insights</span>
+                  </div>
+                </div>
+
+                <div className="absolute top-1/4 -left-5 bg-white p-3 rounded-lg shadow-lg border border-gray-100">
+                  <div className="flex flex-col items-center gap-1">
+                    <FileCheck className="text-green-600 w-5 h-5" />
+                    <span className="text-xs font-semibold text-gray-900">Verified</span>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        </motion.section>
+
+        {/* Features Section */}
+        <motion.section
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="py-20 bg-gradient-to-br from-gray-50 to-blue-50"
+        >
+          <div className="container px-6 mx-auto max-w-5xl">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              viewport={{ once: true }}
+              className="text-center mb-12"
+            >
+              <h2 className="text-3xl md:text-4xl font-semibold mb-4 text-gray-900">
+                Why Teams Choose Us
+              </h2>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                Discover how our AI transforms contract management.
+              </p>
+            </motion.div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {features.map((feature, index) => (
+                <motion.div
+                  key={feature.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  className="p-6 rounded-xl bg-white shadow-sm hover:shadow-md transition-shadow border border-gray-100"
+                >
+                  <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center mb-4">
+                    {feature.icon}
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2 text-gray-900">
+                    {feature.title}
+                  </h3>
+                  <p className="text-base text-gray-600">{feature.desc}</p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </motion.section>
+
+        {/* How It Works Section */}
+        <motion.section
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="py-20 bg-white"
+        >
+          <div className="container px-6 mx-auto max-w-5xl">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              viewport={{ once: true }}
+              className="text-center mb-12"
+            >
+              <h2 className="text-3xl md:text-4xl font-semibold mb-4 text-gray-900">
+                How It Works
+              </h2>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                Three simple steps to revolutionize your contract reviews.
+              </p>
+            </motion.div>
+            <div className="grid md:grid-cols-3 gap-8">
+              {[
+                {
+                  step: "01",
+                  title: "Upload",
+                  desc: "Upload your contract document in any format",
+                  icon: <Upload className="w-8 h-8 text-indigo-600" />,
+                },
+                {
+                  step: "02",
+                  title: "Analyze",
+                  desc: "Our AI engine analyzes the entire document",
+                  icon: <Search className="w-8 h-8 text-indigo-600" />,
+                },
+                {
+                  step: "03",
+                  title: "Review",
+                  desc: "Get detailed insights and recommendations",
+                  icon: <FileText className="w-8 h-8 text-indigo-600" />,
+                },
+              ].map((item, index) => (
+                <motion.div
+                  key={item.step}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  className="text-center"
+                >
+                  <div className="flex justify-center mb-4">{item.icon}</div>
+                  <div className="bg-indigo-50 text-indigo-600 font-semibold text-lg w-12 h-12 rounded-full flex items-center justify-center mb-4 mx-auto">
+                    {item.step}
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2 text-gray-900">
+                    {item.title}
+                  </h3>
+                  <p className="text-base text-gray-600">{item.desc}</p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </motion.section>
+
+        {/* Testimonials Section */}
+        <motion.section
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="py-20 bg-gradient-to-br from-gray-50 to-indigo-50"
+        >
+          <div className="container px-6 mx-auto max-w-5xl">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              viewport={{ once: true }}
+              className="text-center mb-12"
+            >
+              <h2 className="text-3xl md:text-4xl font-semibold mb-4 text-gray-900">
+                Trusted by Professionals
+              </h2>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                Hear from teams who’ve transformed their workflow.
+              </p>
+            </motion.div>
+            <div className="grid md:grid-cols-2 gap-8">
+              {testimonials.map((testimonial, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-100"
+                >
+                  <div className="flex justify-start mb-4">
+                    {[...Array(5)].map((_, i) => (
+                      <Star
+                        key={i}
+                        className="w-5 h-5 text-yellow-400 fill-current"
+                      />
+                    ))}
+                  </div>
+                  <p className="text-base text-gray-600 italic mb-4">
+                    "{testimonial.quote}"
+                  </p>
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center">
+                      {testimonial.icon}
+                    </div>
+                    <div>
+                      <div className="font-semibold text-gray-900">
+                        {testimonial.author}
+                      </div>
+                      <div className="text-sm text-gray-500">
+                        {testimonial.position}, {testimonial.company}
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </motion.section>
+
+        {/* CTA Section */}
+        <motion.section
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="py-20 bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-600 text-white"
+        >
+          <div className="container px-6 mx-auto max-w-5xl">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              viewport={{ once: true }}
+            >
+              <h2 className="text-3xl md:text-4xl font-semibold mb-4">
+                Get Started Today
+              </h2>
+              <p className="text-lg mb-8 text-indigo-100">
+                Join thousands of teams optimizing contracts with AI. Try it
+                free.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link href="/signup">
+                  <Button
+                    size="lg"
+                    className="bg-white text-indigo-600 hover:bg-gray-50 font-medium rounded-lg px-8 py-3 shadow-md transition-transform hover:scale-105"
+                  >
+                    Try for Free <ArrowRight className="ml-2 w-5 h-5" />
+                  </Button>
+                </Link>
+                <Link href="/contact">
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="border-white/30 bg-transparent hover:bg-white/10 text-white font-medium rounded-lg px-8 py-3 transition-transform hover scale-105"
+                  >
+                    Contact Sales
+                  </Button>
+                </Link>
               </div>
-            ))}
+            </motion.div>
           </div>
-        </div>
-      </section>
+        </motion.section>
 
-     
-      <section className="py-16 bg-gray-50">
-        <div className="container px-4 max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-8 text-gray-900">What Our Users Say</h2>
-          <div className="bg-white p-8 rounded-xl shadow-md max-w-2xl mx-auto">
-            <p className="text-gray-600 italic mb-4">This AI tool cut our contract review time in half and saved us thousands in legal fees!</p>
-            <div className="font-semibold text-gray-900">Sarah M.</div>
-            <div className="text-sm text-gray-500">Legal Operations Lead</div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-16 bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
-        <div className="container px-4 max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Simplify Your Contracts?</h2>
-          <p className="text-lg opacity-90 mb-6">Join thousands of teams revolutionizing their workflow</p>
-          <Link
-           href={"/signup"}
-          >
-          <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 shadow-lg transform hover:scale-105 transition-all">
-            Get Started Now <ArrowRight className="ml-2 w-5 h-5" />
-          </Button>
-          </Link>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="py-12 bg-gray-900 text-gray-300">
-        <div className="container px-4 max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div>
-              <h3 className="text-lg font-semibold text-white mb-4">AI Contracts</h3>
-              <p className="text-sm">Revolutionizing contract management with AI technology.</p>
+        {/* Footer */}
+        <footer className="py-16 bg-gray-900 text-gray-300">
+          <div className="container px-6 mx-auto max-w-5xl">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+              <div className="space-y-4">
+                <h3 className="text-xl font-semibold text-white mb-4">
+                  AI Contracts
+                </h3>
+                <p className="text-sm">
+                  Empowering teams with intelligent contract solutions that save
+                  time and reduce risk.
+                </p>
+                <div className="flex gap-4 pt-4">
+                  {[
+                    {
+                      name: "twitter",
+                      icon: <ArrowRight className="w-5 h-5 text-white" />,
+                    },
+                    {
+                      name: "linkedin",
+                      icon: <ArrowRight className="w-5 h-5 text-white" />,
+                    },
+                    {
+                      name: "facebook",
+                      icon: <ArrowRight className="w-5 h-5 text-white" />,
+                    },
+                  ].map((social) => (
+                    <Link
+                      key={social.name}
+                      href={`#${social.name}`}
+                      className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-gray-700 transition-colors"
+                    >
+                      <span className="sr-only">{social.name}</span>
+                      {social.icon}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-white mb-4">
+                  Product
+                </h3>
+                <ul className="space-y-3 text-sm">
+                  {["Features", "Pricing", "Use Cases", "Security"].map(
+                    (item) => (
+                      <li key={item}>
+                        <Link
+                          href={`/${item.toLowerCase().replace(" ", "-")}`}
+                          className="hover:text-white transition-colors"
+                        >
+                          {item}
+                        </Link>
+                      </li>
+                    )
+                  )}
+                </ul>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-white mb-4">
+                  Company
+                </h3>
+                <ul className="space-y-3 text-sm">
+                  {["About", "Blog", "Careers", "Contact"].map((item) => (
+                    <li key={item}>
+                      <Link
+                        href={`/${item.toLowerCase().replace(" ", "-")}`}
+                        className="hover:text-white transition-colors"
+                      >
+                        {item}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-white mb-4">
+                  Get in Touch
+                </h3>
+                <ul className="space-y-3 text-sm">
+                  <li className="flex items-center gap-3">
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                      />
+                    </svg>
+                    <span>hello@aicontracts.com</span>
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                      />
+                    </svg>
+                    <span>+1 (555) 987-6543</span>
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                      />
+                    </svg>
+                    <span>123 AI Street, San Francisco, CA</span>
+                  </li>
+                </ul>
+              </div>
             </div>
-            <div>
-              <h3 className="text-lg font-semibold text-white mb-4">Quick Links</h3>
-              <ul className="space-y-2 text-sm">
-                <li><Link href="/about" className="hover:text-white transition-colors">About</Link></li>
-                <li><Link href="/pricing" className="hover:text-white transition-colors">Pricing</Link></li>
-                <li><Link href="/contact" className="hover:text-white transition-colors">Contact</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold text-white mb-4">Contact Us</h3>
-              <ul className="space-y-2 text-sm">
-                <li className="flex items-center gap-2">
-                  <Mail className="w-4 h-4" /> <span>support@aicontracts.com</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Phone className="w-4 h-4" /> <span>+1 (555) 123-4567</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Twitter className="w-4 h-4" /> <span>@AIContracts</span>
-                </li>
-              </ul>
+            <div className="mt-12 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4">
+              <p className="text-sm">
+                © {new Date().getFullYear()} AI Contracts. All rights reserved.
+              </p>
+              <div className="flex gap-6">
+                <Link
+                  href="/privacy"
+                  className="text-sm hover:text-white transition-colors"
+                >
+                  Privacy Policy
+                </Link>
+                <Link
+                  href="/terms"
+                  className="text-sm hover:text-white transition-colors"
+                >
+                  Terms of Service
+                </Link>
+                <Link
+                  href="/cookies"
+                  className="text-sm hover:text-white transition-colors"
+                >
+                  Cookie Policy
+                </Link>
+              </div>
             </div>
           </div>
-          <div className="mt-8 pt-8 border-t border-gray-800 text-center text-sm">
-            &copy; {new Date().getFullYear()} AI Contracts. All rights reserved.
-          </div>
-        </div>
-      </footer>
+        </footer>
+      </main>
     </div>
   );
 }
