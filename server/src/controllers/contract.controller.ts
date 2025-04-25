@@ -9,10 +9,9 @@ import {
     recognizeContractType
 } from "../services/ai.services";
 
-import {  PrismaClient , User} from "@prisma/client";
-import { PDFProcessingError } from "../services/ai.services";
+import {User} from "@prisma/client";
+import { prisma } from "../utils/clients";
 
-const prisma = new PrismaClient();
 
 const upload = multer({
     storage: multer.memoryStorage(),

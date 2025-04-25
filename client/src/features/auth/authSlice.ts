@@ -4,7 +4,7 @@ export interface User {
    id: string;
    emailId: string;
    userName: string;
-   profilePic: string; // Required field
+   profilePic: string; 
    isPremium: boolean;
    userContractReviews?: ContractAnalysis[];
  }

@@ -1,13 +1,10 @@
 import  { Request, Response, NextFunction } from 'express';
 import { validationResult } from 'express-validator';
 import bcrypt from 'bcrypt';
-import { PrismaClient } from '@prisma/client';
+import {prisma} from '../utils/clients'
 import ApiError from '../utils/ApiError';
 import ApiResponse from '../utils/ApiResponse';
 import { SignupRequestBody, SigninRequestBody } from '../types';
-
-
-const prisma = new PrismaClient()
 
 const saveSession = (req: Request): Promise<void> => {
     return new Promise((resolve, reject) => {
@@ -85,7 +82,7 @@ export const signInUser = async (req: Request, res: Response, next: NextFunction
       const user = await prisma.user.findUnique({
         where: { emailId },
       });
-
+   
       if (!user) {
         return res.status(401).json(new ApiError(401, 'Invalid credentials'));
       }

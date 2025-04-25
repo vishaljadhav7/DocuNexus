@@ -33,7 +33,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import LoadingSpinner from "../LoadingSpinner";
-import { Button as DialogButton } from "@/components/ui/button"; // Renamed to avoid conflict
+import { Button as DialogButton } from "@/components/ui/button"; 
 import { Analysis } from "@/features/contracts/contractSlice";
 
 export default function UserContracts() {
@@ -52,8 +52,7 @@ export default function UserContracts() {
         ) ?? 0) / totalContracts
       : 0;
 
-  const highRiskContracts = 0; // Placeholder logic; update as needed
-
+  const highRiskContracts = 0; 
   const handleDelete = async (contractId : string) => {
     try {
       await deleteContractById({contractId}).unwrap();

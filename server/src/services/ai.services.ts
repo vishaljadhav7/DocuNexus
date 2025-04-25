@@ -1,14 +1,10 @@
 import redis from "../config/redis";
 
 import { getDocument, PDFPageProxy, PDFDocumentProxy } from "pdfjs-dist";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { aiModel } from "../utils/GeminiModel";
 import { promptForContractRecognition, promptForReviewingContract } from "../utils/promptsForAI";
 import { Impact, Severity } from "@prisma/client";
-const AI_MODEL = 'gemini-1.5-flash';
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_KEY!);
-
-const aiModel = genAI.getGenerativeModel({ model: AI_MODEL });
 export class PDFProcessingError extends Error {
   cause: any;
   name: string;
@@ -264,6 +260,9 @@ Contract text:
     }
   }
 };
+
+
+
 
 
 

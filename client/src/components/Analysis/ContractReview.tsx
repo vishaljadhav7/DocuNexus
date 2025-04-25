@@ -10,9 +10,11 @@ import { Button } from "@/components/ui/button";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import OverallScoreChart from "./ViewChart";
 import { Analysis } from "@/features/contracts/contractSlice";
+import ChatModal from "../Modals/ChatModal";
 
 export default function ContractReview({ analysisResults }: { analysisResults: Analysis | undefined }) {
   const [activeTab, setActiveTab] = useState("summary");
+  const [isOpen, setIsOpen]  = useState(false)
 
   if (!analysisResults) {
     return (
@@ -112,12 +114,16 @@ export default function ContractReview({ analysisResults }: { analysisResults: A
 
   return (
     <div className="container mx-auto px-6 py-8 max-w-6xl">
+      <ChatModal isOpen={isOpen} setIsOpen={setIsOpen} contractId={analysisResults?.id as string}/>
       <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Contract Review</h1>
           <p className="text-sm text-gray-500 mt-2">Detailed analysis and insights for your contract</p>
         </div>
-        <Button className="bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white font-semibold rounded-lg shadow-md transition-all">
+        <Button 
+        className="bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white font-semibold rounded-lg shadow-md transition-all" 
+        onClick={() => { setIsOpen(prev => !prev) }}
+        >
           <MessageSquareText className="h-5 w-5 mr-2" />
           Ask AI
         </Button>

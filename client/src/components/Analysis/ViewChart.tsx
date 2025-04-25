@@ -17,12 +17,12 @@ export default function OverallScoreChart({ overallScore }: OverallScoreChartPro
     {
       name: "Risks",
       value: 100 - overallScore,
-      fill: "#ef4444", // Tailwind red-500
+      fill: "#ef4444", 
     },
     {
       name: "Opportunities",
       value: overallScore,
-      fill: "#0d9488", // Tailwind teal-600
+      fill: "#0d9488", 
     },
   ];
 
@@ -32,11 +32,11 @@ export default function OverallScoreChart({ overallScore }: OverallScoreChartPro
     },
     Risks: {
       label: "Risks",
-      color: "#ef4444", // Matches red-500
+      color: "#ef4444", 
     },
     Opportunities: {
       label: "Opportunities",
-      color: "#0d9488", // Matches teal-600
+      color: "#0d9488", 
     },
   } satisfies ChartConfig;
 
@@ -51,7 +51,7 @@ export default function OverallScoreChart({ overallScore }: OverallScoreChartPro
             nameKey="name"
             innerRadius={50}
             paddingAngle={3}
-            stroke="#e5e7eb" // Tailwind gray-200
+            stroke="#e5e7eb" 
             strokeWidth={1}
           >
             <Label
