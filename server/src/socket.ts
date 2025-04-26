@@ -48,14 +48,21 @@ function createSocketConnection(server: HttpServer): void {
 }
 
 const getReceiverSocketId = (receiverId: string): string | undefined => {
+  console.log("2. (getReceiverSocketId) connectedUsers[receiverId] => ", connectedUsers[receiverId])
   return connectedUsers[receiverId];
 };
 
 const sendMessageToSocketId = (socketId: string, messageObject: MessageObject): void => {
-  if (io) {
-    io.to(socketId).emit(messageObject.eventName, messageObject.data);
-  } else {
+  if (!io) {
     console.log('Socket.io not initialized.');
+    return;
+  }
+  
+  try {
+    io.to(socketId).emit(messageObject.eventName, messageObject.data);
+    console.log(`Message sent to socket ${socketId}: ${messageObject.eventName}`);
+  } catch (error) {
+    console.error('Error sending socket message:', error);
   }
 };
 

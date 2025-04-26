@@ -47,12 +47,11 @@ export const analyzeQueryForContract = async (
     const { contractId } = req.params;
     const { chatQuery } = req.body;
 
-    // Validate input
     if (!contractId || !chatQuery) {
       return res.status(400).json({ error: "contractId and chatQuery are required" });
     }
 
-    // Fetch contract from database
+
     const contract = await prisma.contractReview.findFirst({
       where: { id: contractId },
       select: { contractText: true, contractType: true },
@@ -71,13 +70,6 @@ export const analyzeQueryForContract = async (
       return res.status(500).json({ error: "Failed to generate AI response" });
     }
 
-    const socketId = getReceiverSocketId(req.user?.id as string)
-    if(socketId){
-      sendMessageToSocketId(socketId, {eventName : "newMessage" , data : response});
-    }
-    
-
-
     const chatResponse = await prisma.chat.create({
       data : {
         userQuery : response.query,
@@ -86,13 +78,18 @@ export const analyzeQueryForContract = async (
       }
     })
 
-    console.log("===>>> ", chatResponse)
+    res.status(200).json(new ApiResponse(200, chatResponse, "Generated response for the query!"));
+    
+    try {
+      const socketId = getReceiverSocketId(req.user?.id as string);
+      if (socketId) {
+        sendMessageToSocketId(socketId, {eventName: "new-message", data: chatResponse});
+      }
+    } catch (socketError) {
+      console.error("Socket error:", socketError);
+    }
 
-   if(!chatResponse) {
-    return res.status(500).json({ error: "Could not save the response!" });
-   }
-
-    return new ApiResponse(200, chatResponse, "Generated response for the query!")
+    return ;
   } catch (error: any) {
     console.error("Error in analyzeQueryForContract:", {
       message: error.message,

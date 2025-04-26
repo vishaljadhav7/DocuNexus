@@ -15,14 +15,3 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
 
 export const useSocketContext = (): Socket | null => useContext(SocketContext);
 
-// pages/_app.tsx
-// import { AppProps } from 'next/app';
-// import { SocketProvider } from '../context/SocketContext';
-
-// export default function MyApp({ Component, pageProps }: AppProps) {
-//   return (
-//     <SocketProvider>
-//       <Component {...pageProps} />
-//     </SocketProvider>
-//   );
-// }
