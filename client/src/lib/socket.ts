@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
 
-const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:4000';
+const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL
 
 export const useSocket = (userId : string): Socket | null => {
   const socketRef = useRef<Socket | null>(null);
