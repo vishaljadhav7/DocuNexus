@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState, useRef, useCallback } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send, X } from 'lucide-react';
 import axios from 'axios';
@@ -55,7 +55,7 @@ const ChatModal = ({ isOpen, setIsOpen, contractId }: ModalProps) => {
     }
   };
 
-  const retrieveChats = useCallback(async () => {
+  const retrieveChats = async () => {
     setIsLoading(true);
     try {
       const response = await axios.get(`http://localhost:4000/chat/${contractId}`, {
@@ -67,7 +67,7 @@ const ChatModal = ({ isOpen, setIsOpen, contractId }: ModalProps) => {
     } finally {
       setIsLoading(false);
     }
-  }, [contractId]) 
+  } 
 
   const handleNewMessage = (data: Chat) => {
     setChatHistory((prev) => {
@@ -94,7 +94,7 @@ const ChatModal = ({ isOpen, setIsOpen, contractId }: ModalProps) => {
 
   useEffect(() => {
     retrieveChats();
-  }, [retrieveChats]);
+  }, [contractId]);
 
   return (
     <AnimatePresence>
