@@ -43,7 +43,7 @@ const ChatModal = ({ isOpen, setIsOpen, contractId }: ModalProps) => {
     setIsLoading(true);
     try {
        await axios.post(
-        `http://localhost:4000/chat/${contractId}`,
+       `${process.env.NEXT_PUBLIC_API_URL}/chat/${contractId}`,
         { chatQuery: message },
         { withCredentials: true }
       );
@@ -58,7 +58,7 @@ const ChatModal = ({ isOpen, setIsOpen, contractId }: ModalProps) => {
   const retrieveChats = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get(`http://localhost:4000/chat/${contractId}`, {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/chat/${contractId}`, {
         withCredentials: true,
       });
       setChatHistory(response.data.data);
