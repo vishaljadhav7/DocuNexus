@@ -25,19 +25,6 @@ app.use(morgan("dev"));
 
 
 
-// app.use(session({
-//     store: sessionStore,
-//     secret: process.env.SECRET_KEY!,
-//     resave: false,
-//     saveUninitialized: false,
-//     cookie: {
-//       maxAge: 60 * 60 * 1000,
-//       httpOnly: true,
-//       secure: true,
-//       sameSite: 'none',
-//     },
-//   }));
-
 app.use(session({
   store: sessionStore,
   secret: process.env.SECRET_KEY!,

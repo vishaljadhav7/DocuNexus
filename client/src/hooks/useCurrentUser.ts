@@ -2,9 +2,11 @@
 
 import { useGetCurrentUserQuery} from '../features/auth/authApi';
 import { useAppDispatch } from '@/redux/store';
-import { addUser, User as AuthSliceUser } from '@/features/auth/authSlice'; // Rename to avoid conflict
+import { addUser, User as AuthSliceUser } from '@/features/auth/authSlice'; 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+
+const URL = "https://plus.unsplash.com/premium_photo-1738677617432-e3bfaad291c1?q=40&w=500"
 
 export const useCurrentUser = () => {
   const dispatch = useAppDispatch();
@@ -22,7 +24,7 @@ export const useCurrentUser = () => {
     
       const transformedUser: AuthSliceUser = {
         ...apiUser,
-        profilePic: apiUser?.profilePic  || 'default-profile-pic-url', 
+        profilePic: apiUser?.profilePic  || URL, 
         userContractReviews: apiUser?.contractReviews, 
       };
       dispatch(addUser(transformedUser));

@@ -13,7 +13,7 @@ import {
 import { authApi } from "@/features/auth/authApi";
 import { contractApi } from "@/features/contracts/contractApi";
 import { setupListeners } from "@reduxjs/toolkit/query";
-
+import { chatApi } from "@/features/chats/chatApi";
 
 
 /* REDUX STORE */
@@ -23,9 +23,11 @@ export const makeStore = () => {
       user : userReducer,
       contract : contractReducer,
       [contractApi.reducerPath] : contractApi.reducer,
-      [authApi.reducerPath] : authApi.reducer
+      [authApi.reducerPath] : authApi.reducer,
+      [chatApi.reducerPath] : chatApi.reducer
     },
-    middleware : (getDefaultMiddleware) => getDefaultMiddleware().concat(authApi.middleware).concat(contractApi.middleware),
+    middleware : (getDefaultMiddleware) => 
+      getDefaultMiddleware().concat(authApi.middleware).concat(contractApi.middleware).concat(chatApi.middleware),
 })};
 
 /* REDUX TYPES */

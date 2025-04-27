@@ -3,7 +3,6 @@ import ApiError from "../utils/ApiError";
 import ApiResponse from "../utils/ApiResponse";
 import { analysisChatQueryWithAI } from "../services/chat.services";
 import { prisma } from "../utils/clients";
-import { getReceiverSocketId, sendMessageToSocketId } from "../socket";
 
 interface ChatQueryBody {
   chatQuery: string;
@@ -78,18 +77,8 @@ export const analyzeQueryForContract = async (
       }
     })
 
-    res.status(200).json(new ApiResponse(200, chatResponse, "Generated response for the query!"));
-    
-    try {
-      const socketId = getReceiverSocketId(req.user?.id as string);
-      if (socketId) {
-        sendMessageToSocketId(socketId, {eventName: "new-message", data: chatResponse});
-      }
-    } catch (socketError) {
-      console.error("Socket error:", socketError);
-    }
-
-    return ;
+   return res.status(200).json(new ApiResponse(200, chatResponse, "Generated response for the query!"));
+  
   } catch (error: any) {
     console.error("Error in analyzeQueryForContract:", {
       message: error.message,

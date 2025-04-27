@@ -1,8 +1,7 @@
 import { Dispatch, SetStateAction, useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useRetreiveChatsQuery, useSendQueryMutation } from '@/features/chats/chatApi';
 import { Send, X } from 'lucide-react';
-import axios from 'axios';
-import { useSocketContext } from '@/Context/SocketContext';
 
 interface ModalProps {
   isOpen: boolean;
@@ -19,13 +18,10 @@ interface Chat {
 }
 
 const ChatModal = ({ isOpen, setIsOpen, contractId }: ModalProps) => {
-  const [chatHistory, setChatHistory] = useState<Chat[]>([]);
   const [message, setMessage] = useState<string>('');
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const socket = useSocketContext();
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
-  const formatDateString = (dateString : string) => {
+  const formatDateString = (dateString: string) => {
     const date = new Date(dateString);
     const formattedTime = date.toLocaleString('en-US', {
       month: 'short',
@@ -36,43 +32,21 @@ const ChatModal = ({ isOpen, setIsOpen, contractId }: ModalProps) => {
       hour12: true,
     });
     return formattedTime;
-  }
+  };
+
+  const { data: chatHistory, isLoading: isChatHistoryLoading, isError } = useRetreiveChatsQuery({ contractId });
+
+  
+  const [sendUserQuery, { isLoading: isSending }] = useSendQueryMutation();
 
   const sendChat = async () => {
     if (!message.trim()) return;
-    setIsLoading(true);
     try {
-       await axios.post(
-       `${process.env.NEXT_PUBLIC_API_URL}/chat/${contractId}`,
-        { chatQuery: message },
-        { withCredentials: true }
-      );
+      await sendUserQuery({ contractId, chatQuery: message }).unwrap();
       setMessage('');
     } catch (error) {
-      console.error("Error sending chat:", error);
-    } finally {
-      setIsLoading(false);
+      console.error('Error sending chat:', error);
     }
-  };
-
-  const retrieveChats = async () => {
-    setIsLoading(true);
-    try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/chat/${contractId}`, {
-        withCredentials: true,
-      });
-      setChatHistory(response.data.data);
-    } catch (error) {
-      console.error("Error retrieving chats:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  } 
-
-  const handleNewMessage = (data: Chat) => {
-    setChatHistory((prev) => {
-      return [...prev, data];
-    });
   };
 
   useEffect(() => {
@@ -81,20 +55,9 @@ const ChatModal = ({ isOpen, setIsOpen, contractId }: ModalProps) => {
     }
   }, [chatHistory]);
 
-  useEffect(() => {
-    if (socket) {
-      socket.on('new-message', handleNewMessage);
-    }
-    return () => {
-      if (socket) {
-        socket.off('new-message', handleNewMessage);
-      }
-    };
-  }, [socket]);
-
-  useEffect(() => {
-    retrieveChats();
-  }, [contractId]);
+  if (isError) {
+    console.error('Could not retrieve chats');
+  }
 
   return (
     <AnimatePresence>
@@ -128,17 +91,14 @@ const ChatModal = ({ isOpen, setIsOpen, contractId }: ModalProps) => {
             </div>
 
             {/* Chat container */}
-            <div
-              ref={chatContainerRef}
-              className="h-[60vh] p-4 overflow-y-auto bg-gray-50 dark:bg-gray-900"
-            >
-              {chatHistory.length === 0 && !isLoading ? (
+            <div ref={chatContainerRef} className="h-[60vh] p-4 overflow-y-auto bg-gray-50 dark:bg-gray-900">
+              {chatHistory?.length === 0 && !isChatHistoryLoading ? (
                 <div className="flex justify-center items-center h-full text-gray-500 dark:text-gray-400 text-sm">
                   No messages yet. Start asking AI!
                 </div>
               ) : (
                 <AnimatePresence>
-                  {chatHistory.map((chat) => (
+                  {chatHistory?.map((chat: Chat) => (
                     <motion.div
                       key={chat.id}
                       initial={{ opacity: 0, y: 30 }}
@@ -147,25 +107,23 @@ const ChatModal = ({ isOpen, setIsOpen, contractId }: ModalProps) => {
                       transition={{ duration: 0.4, ease: 'easeOut' }}
                       className="mb-4"
                     >
-                      {/* User Query (Right) */}
                       <div className="flex justify-end mb-2">
                         <div className="max-w-xs p-3 bg-blue-600 text-white rounded-2xl rounded-br-none shadow-md">
                           <p className="text-sm">{chat.userQuery}</p>
-                          <p className="text-xs text-gray-200 mt-1 text-right">{ formatDateString(chat.createdAt)}</p>
+                          <p className="text-xs text-gray-200 mt-1 text-right">{formatDateString(chat.createdAt)}</p>
                         </div>
                       </div>
-                      {/* AI Response (Left) */}
                       <div className="flex justify-start">
                         <div className="max-w-xs p-3 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-2xl rounded-bl-none shadow-md">
                           <p className="text-sm">{chat.aiResponse}</p>
-                          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 text-left">{ formatDateString(chat.createdAt)}</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 text-left">{formatDateString(chat.createdAt)}</p>
                         </div>
                       </div>
                     </motion.div>
                   ))}
                 </AnimatePresence>
               )}
-              {isLoading && (
+              {(isChatHistoryLoading || isSending) && (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -191,17 +149,17 @@ const ChatModal = ({ isOpen, setIsOpen, contractId }: ModalProps) => {
                       sendChat();
                     }
                   }}
-                  disabled={isLoading}
+                  disabled={isSending || isChatHistoryLoading} // Disable textarea during sending or fetching
                 />
                 <motion.button
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                   className={`p-3 bg-blue-600 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${
-                    isLoading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700'
+                    isSending || isChatHistoryLoading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700'
                   }`}
                   aria-label="Send message"
                   onClick={sendChat}
-                  disabled={isLoading}
+                  disabled={isSending || isChatHistoryLoading} // Disable button during sending or fetching
                 >
                   <Send className="w-5 h-5" />
                 </motion.button>
