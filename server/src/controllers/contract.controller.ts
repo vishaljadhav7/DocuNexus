@@ -48,7 +48,7 @@ const upload = multer({
 
      await redis.del(fileKey);
 
-     res.status(201).json(new ApiResponse(200, recognizedType, "type detected successfully"))
+     res.status(200).json(new ApiResponse(200, recognizedType, "type detected successfully"))
 
     } catch (error : any) {
       res.status(400).json(new ApiError(400, `Error : ${error.message}`))  
@@ -129,7 +129,7 @@ const upload = multer({
           where: { id: newContractReview.id },
           include: { risks: true, opportunities: true }
       });
-      res.status(200).json(new ApiResponse(200, reviewedContract, "contract fetched successfully!"))
+      res.status(201).json(new ApiResponse(200, reviewedContract, "contract fetched successfully!"))
        
      } catch (error : any) {
 

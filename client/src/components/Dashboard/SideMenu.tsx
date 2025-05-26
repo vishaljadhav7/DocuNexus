@@ -57,9 +57,6 @@ const SideMenuContent = () => {
           ))}
         </ul>
       </nav>
-      <div className="p-4 border-t border-gray-100">
-        <UserMenu />
-      </div>
     </div>
   );
 };
@@ -98,6 +95,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   return (
     <div className="flex h-screen bg-gray-50 relative">
       <SideMenu />
+       <div className="p-4 border-t border-gray-100">
+        <UserMenu />
+      </div>
       <div className="flex-1 flex flex-col overflow-hidden">{children}</div>
     </div>
   );
