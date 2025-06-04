@@ -71,7 +71,7 @@ model Risk {
   contractReviewId String
   contractReview   ContractReview @relation(fields: [contractReviewId], references: [id], onDelete: Cascade)
   severity         Severity
-}
+}  
 
 model Opportunity {
   id                 String         @id @default(uuid())

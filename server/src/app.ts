@@ -7,7 +7,8 @@ import { sessionStore } from './config/sessionConfig';
 import authRouter from './routes/auth.routes';
 import chatRouter from './routes/chat.routes';
 import contractRouter from './routes/contract.routes';
-import { loadUser } from './middlewares/auth';
+import { loadUser } from './middlewares/auth.middleware';
+import { notFoundHandler, errorHandler } from './middlewares/error.middleware';
 
 const app = express();
 
@@ -45,6 +46,12 @@ app.use(loadUser);
 app.use('/auth', authRouter);
 app.use("/contract", contractRouter);
 app.use("/chat", chatRouter);
+
+// Handle 404 errors
+app.use(notFoundHandler);
+
+// Global error handler
+app.use(errorHandler);
 
 app.get("/", (req : Request, res: Response) => {
   res.status(200).send("healthy server")

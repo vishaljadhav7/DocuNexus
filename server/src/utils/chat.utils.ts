@@ -1,10 +1,11 @@
-import { aiModel } from "../utils/GeminiModel";
+import { aiModel } from "./gemini.utils";
+import { BadRequestError, InternalServerError} from "./error.utils";
 
 interface AIResponse {
     query: string;
     answer: string;
   }
-
+    
 
   function parseJsonToObject(data: string): { query: string; answer: string } | null {
     try {
@@ -26,23 +27,23 @@ interface AIResponse {
     }
   }
 
-export const analysisChatQueryWithAI = async (
+export const analyzeContractQuery = async (
     contractText: string,
     contractType: string,
     chatQuery: string
-  ): Promise<AIResponse | null> => {
+  ): Promise<AIResponse | null>  => {
     try {
       if (!contractText || !contractType || !chatQuery) {
-        throw new Error("Missing required parameters: contractText, contractType, or chatQuery");
+        throw new BadRequestError("Missing required parameters: contractText, contractType, or chatQuery");
       }
-  
+
       const prompt = `
         You are an expert contract analyst tasked with answering a user's query about a ${contractType} contract. Your objective is to deliver a clear, concise, and accessible response by analyzing the provided contract text. Use the following inputs:
-  
+
         1. **chatQuery**: ${chatQuery} (The user's specific question or request regarding the contract).
         2. **contractText**: ${contractText} (The full contract text, extracted from a PDF using pdfjs).
         3. **contractType**: ${contractType} (The contract type, e.g., employment, service, lease).
-  
+
         ### Instructions:
         - Examine the **contractText** within the context of the **contractType** to directly address the **chatQuery**.
         - Provide a straightforward, user-friendly answer that directly responds to the query.
@@ -53,34 +54,38 @@ export const analysisChatQueryWithAI = async (
             "query": "${chatQuery}",
             "answer": "A clear and concise response to the query, referencing the contract text as needed"
           }
-  
+
         ### Important:
         - Output only the JSON object, without additional text, markdown, or formatting.
         - Ensure the **answer** is easy to understand for non-experts.
-  
+
         Contract text:
         ${contractText}
       `;
-  
+
       const results = await aiModel.generateContent(prompt);
       const text = results.response.text();
-  
-      if (!text) {
-        throw new Error("No response received from AI model");
-      }
-  
 
-      try {
-        const resData = parseJsonToObject(text);
-        return resData 
-      } catch (parseError) {
-        throw new Error("Invalid JSON response from AI model");
+      if (!text) {
+        throw new InternalServerError("No response received from AI model");
       }
+
+      const resData = parseJsonToObject(text);
+      if (!resData) {
+        throw new InternalServerError("Invalid JSON response from AI model");
+      }
+
+      return resData;
     } catch (error: any) {
-      console.error("Error in analysisChatQueryWithAI:", {
+      console.error("Error in AIService.analyzeContractQuery:", {
         message: error.message,
         stack: error.stack,
       });
-      return null;
+      
+      if (error instanceof BadRequestError) {
+        throw error;
+      }
+      
+      throw new InternalServerError("Failed to analyze contract query with AI");
     }
-  };
+  }
